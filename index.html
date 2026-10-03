@@ -1809,14 +1809,14 @@ mainForm.addEventListener('submit',function(e){
   }
 
   // 1) Google Sheet data
+  // Send every field in both Capitalized and lowercase keys so any script version can read it
+  const ts = new Date().toLocaleString();
   const formData = new URLSearchParams();
-  formData.append('Timestamp', new Date().toLocaleString());
-  formData.append('Name', name);
-  formData.append('Phone', phone);
-  formData.append('Age', age);
-  formData.append('Gender', gender);
-  formData.append('Profession', profession);
-  formData.append('Source', source);
+  const fields = { Timestamp: ts, Name: name, Phone: phone, Age: age, Gender: gender, Profession: profession, Source: source };
+  Object.keys(fields).forEach(k => {
+    formData.append(k, fields[k]);
+    formData.append(k.toLowerCase(), fields[k]);
+  });
 
   // keepalive so the request still finishes after the WhatsApp tab opens
   fetch(SCRIPT_URL, {
